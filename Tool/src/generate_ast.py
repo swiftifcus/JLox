@@ -9,6 +9,11 @@ astExpressionTypes = [
     "Unary : Token operator, Expr right",
   ]
 
+astStatementTypes = [
+    "Expression : Expr expression",
+    "Print : Expr expression",
+]
+
 def main():
   if len(sys.argv) != 2:
     print("Usage: python generate_ast <output_directory")
@@ -16,7 +21,8 @@ def main():
   
   outputDir = sys.argv[1]
   print(f"outputDir: {outputDir}")
-  defineAst(outputDir=outputDir, baseName="Expr", types=astExpressionTypes)
+  # defineAst(outputDir=outputDir, baseName="Expr", types=astExpressionTypes)
+  defineAst(outputDir=outputDir, baseName="Stmt", types=astStatementTypes)
 
 def createWriter(file: TextIOWrapper):
   def w(contents: str|None = ""):
@@ -27,7 +33,7 @@ def defineAst(outputDir: str, baseName: str, types: list[str]):
   path = f"{outputDir}/{baseName}.java"
   with open(path, 'a') as file:
     writeln = createWriter(file)
-    writeln("import java.util.List")
+    writeln("import java.util.List;")
     writeln(f"abstract class {baseName} {{")
     defineVisitor(writeln=writeln, baseName=baseName, types=types)
 
@@ -43,8 +49,11 @@ def defineAst(outputDir: str, baseName: str, types: list[str]):
     writeln("}")
     file.close()
 
-def defineType(writeln: Callable[[str]], baseName: str, className: str, fieldList: str):
+def defineType(writeln: Callable[[str], None], baseName: str, className: str, fieldList: str):
   writeln(f"  static class {className} extends {baseName} {{")
+
+  # Store parameters in fields
+  fields = fieldList.split(", ")
 
   # Fields.
   for field in fields:
@@ -53,8 +62,6 @@ def defineType(writeln: Callable[[str]], baseName: str, className: str, fieldLis
   # Constructor
   writeln(f"    {className} ({fieldList}) {{")
 
-  # Store parameters in fields
-  fields = fieldList.split(", ")
   for field in fields:
     name = field.split(" ")[1]
     writeln(f"    this.{name} = {name};")
@@ -68,7 +75,7 @@ def defineType(writeln: Callable[[str]], baseName: str, className: str, fieldLis
   
   writeln("  }")
 
-def defineVisitor(writeln: Callable[[str]], baseName: str, types: list[str]):
+def defineVisitor(writeln: Callable[[str], None], baseName: str, types: list[str]):
   writeln("  interface Visitor<R> {")
   for typ in types:
     typeName = typ.split(":")[0].strip()
