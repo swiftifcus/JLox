@@ -7,11 +7,13 @@ astExpressionTypes = [
     "Grouping : Expr expression",
     "Literal : Object value",
     "Unary : Token operator, Expr right",
+    "Var : Token name, Expr initializer",
   ]
 
 astStatementTypes = [
     "Expression : Expr expression",
     "Print : Expr expression",
+    "Variable : Token name",
 ]
 
 def main():
@@ -21,7 +23,7 @@ def main():
   
   outputDir = sys.argv[1]
   print(f"outputDir: {outputDir}")
-  # defineAst(outputDir=outputDir, baseName="Expr", types=astExpressionTypes)
+  defineAst(outputDir=outputDir, baseName="Expr", types=astExpressionTypes)
   defineAst(outputDir=outputDir, baseName="Stmt", types=astStatementTypes)
 
 def createWriter(file: TextIOWrapper):
