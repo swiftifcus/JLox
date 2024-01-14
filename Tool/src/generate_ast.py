@@ -33,7 +33,7 @@ def createWriter(file: TextIOWrapper):
 
 def defineAst(outputDir: str, baseName: str, types: list[str]):
   path = f"{outputDir}/{baseName}.java"
-  with open(path, 'a') as file:
+  with open(path, 'w') as file:
     writeln = createWriter(file)
     writeln("import java.util.List;")
     writeln(f"abstract class {baseName} {{")
