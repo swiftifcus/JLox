@@ -3,17 +3,19 @@ from typing import Callable
 import sys
 
 astExpressionTypes = [
+    "Assign : Token name, Expr value",
     "Binary : Expr left, Token operator, Expr right",
     "Grouping : Expr expression",
     "Literal : Object value",
     "Unary : Token operator, Expr right",
-    "Var : Token name, Expr initializer",
+    "Variable : Token name",
   ]
 
 astStatementTypes = [
+    "Block : List<Stmt> statements",
     "Expression : Expr expression",
     "Print : Expr expression",
-    "Variable : Token name",
+    "Var : Token name, Expr initializer",
 ]
 
 def main():
