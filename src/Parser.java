@@ -205,7 +205,7 @@ public class Parser {
     }
 
     private Expr or() {
-        Expr expr = or();
+        Expr expr = and();
 
         while (match(TokenType.OR)) {
             Token operator = previous();
